@@ -1,0 +1,17 @@
+# Rust build artifacts
+/target/
+
+# Node / frontend
+frontend/node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+
+# Runtime identity keys (private keys — never commit)
+bootstrap-node-data/
+relay-node-data/
+
+# OS / editor
+.DS_Store
+*.swp
+.idea/
+.vscode/

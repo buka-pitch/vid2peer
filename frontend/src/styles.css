@@ -1,0 +1,421 @@
+:root {
+  --bg: #0f1220;
+  --panel: #1a1f35;
+  --panel-2: #232a4a;
+  --text: #e6e9f5;
+  --muted: #8b92b5;
+  --accent: #4f7cff;
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --amber: #f39c12;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+}
+
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.app-header h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.mode-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.relay-input {
+  width: 340px;
+}
+
+.status-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.status-online {
+  background: rgba(46, 204, 113, 0.2);
+  color: var(--green);
+}
+
+.status-starting {
+  background: rgba(243, 156, 18, 0.2);
+  color: var(--amber);
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid #2a3153;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.card h2 {
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+
+.card h3 {
+  margin: 14px 0 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+code {
+  background: var(--panel-2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+input,
+select {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid #3a4470;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+}
+
+button {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid #3a4470;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Identity card */
+.identity-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.identity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 260px;
+}
+
+.label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.peer-id {
+  font-size: 13px;
+}
+
+.name-row {
+  display: flex;
+  gap: 8px;
+}
+
+.identity-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.qr {
+  width: 220px;
+  height: 220px;
+  border-radius: 8px;
+  background: #fff;
+  padding: 4px;
+}
+
+/* Peer list */
+.peer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.peer-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  border-radius: 6px;
+}
+
+.peer-list li.selected {
+  background: var(--panel-2);
+}
+
+.peer-row {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0;
+}
+
+.peer-row:hover {
+  border: none;
+  background: none;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot.online {
+  background: var(--green);
+}
+
+.dot.offline {
+  background: #555;
+}
+
+.peer-name {
+  font-weight: 600;
+}
+
+.peer-short {
+  margin-left: auto;
+}
+
+.call-btn {
+  flex-shrink: 0;
+  background: rgba(79, 124, 255, 0.15);
+  color: var(--accent);
+}
+
+/* Call panel */
+.call-status {
+  margin-left: 8px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(79, 124, 255, 0.2);
+  color: var(--accent);
+  text-transform: capitalize;
+}
+
+.status-active {
+  background: rgba(46, 204, 113, 0.2);
+  color: var(--green);
+}
+
+.status-error {
+  background: rgba(231, 76, 60, 0.2);
+  color: var(--red);
+}
+
+.error-text {
+  color: var(--red);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 10px;
+  min-height: 300px;
+}
+
+@media (max-width: 700px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.remote-video,
+.local-video {
+  width: 100%;
+  background: #000;
+  border-radius: 8px;
+  min-height: 180px;
+  object-fit: cover;
+}
+
+.video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #05060e;
+  border-radius: 8px;
+  color: var(--muted);
+  min-height: 180px;
+}
+
+.video-placeholder.small {
+  min-height: 100px;
+}
+
+.call-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.call-controls .accept {
+  background: rgba(46, 204, 113, 0.2);
+  color: var(--green);
+}
+
+.call-controls .reject,
+.call-controls .hangup {
+  background: rgba(231, 76, 60, 0.2);
+  color: var(--red);
+}
+
+.call-controls .muted {
+  background: rgba(243, 156, 18, 0.2);
+  color: var(--amber);
+}
+
+.stats-line {
+  margin-top: 10px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Chat */
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-list {
+  height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.chat-item {
+  max-width: 70%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.chat-item.in {
+  align-self: flex-start;
+  background: var(--panel-2);
+}
+
+.chat-item.out {
+  align-self: flex-end;
+  background: rgba(79, 124, 255, 0.25);
+}
+
+.chat-time {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.chat-form {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-form input {
+  flex: 1;
+}
+
+/* Debug */
+.debug-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.debug-table td {
+  padding: 4px 0;
+  border-bottom: 1px solid #232a4a;
+}
+
+.debug-table td:first-child {
+  color: var(--muted);
+}
+
+.addr-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.addr-list li {
+  padding: 4px 0;
+}

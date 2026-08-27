@@ -1,0 +1,20 @@
+[package]
+name = "p2p-video-chat-android-ffi"
+version = "0.1.0"
+edition = "2021"
+description = "C ABI bridge exposing p2p-video-chat-core to Android via JNI"
+
+[lib]
+name = "p2pvc_ffi"
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+p2p-video-chat-core = { path = "../rust-core" }
+libp2p = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "sync", "time", "macros"] }
+serde_json = "1"
+jni = { version = "0.21", default-features = false }
+
+[features]
+default = ["jni-bridge"]
+jni-bridge = []

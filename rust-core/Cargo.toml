@@ -1,0 +1,64 @@
+[package]
+name = "p2p-video-chat-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Rust networking core for a decentralized P2P video chat application"
+
+[lib]
+name = "p2p_video_chat_core"
+
+[dependencies]
+libp2p = { workspace = true, features = [
+    "tcp",
+    "noise",
+    "yamux",
+    "identify",
+    "ping",
+    "kad",
+    "request-response",
+    "cbor",
+    "relay",
+    "dcutr",
+    "mdns",
+    "macros",
+    "tokio",
+    "serde",
+    "quic",
+    "gossipsub",
+] }
+tokio = { workspace = true }
+tracing = { workspace = true }
+serde = { workspace = true }
+ciborium = { workspace = true }
+anyhow = { workspace = true }
+futures = { workspace = true }
+async-trait = { workspace = true }
+hex = { workspace = true }
+multiaddr = "0.18"
+uuid = { version = "1", features = ["v4"] }
+
+[dev-dependencies]
+tracing-subscriber = { workspace = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "time", "io-util"] }
+
+[[example]]
+name = "two_peer"
+path = "examples/two_peer.rs"
+required-features = []
+
+[[example]]
+name = "kademlia_demo"
+path = "examples/kademlia_demo.rs"
+required-features = []
+
+[[example]]
+name = "chat_demo"
+path = "examples/chat_demo.rs"
+required-features = []
+
+[[example]]
+name = "signaling_demo"
+path = "examples/signaling_demo.rs"
+required-features = []
