@@ -108,7 +108,10 @@ npm install
 npm run dev          # Vite dev server, http://localhost:5173
 ```
 
-Open the app in **two tabs** of the same browser.
+Open the preview URL on **two devices** (phone + laptop, two phones, etc.).
+Peers appear automatically. Press **call**, allow camera/mic.
+
+Same-browser two-tab demo still works: switch signaling to **Same-browser tabs**.
 
 ### 5. Android
 
@@ -122,21 +125,21 @@ See [android/README.md](android/README.md) for the JNI wrapper and example app.
 
 ## Make a call (web app)
 
-**Same device — Broadcast mode (zero infrastructure):**
+**Across devices (default):**
 
-1. Open `http://localhost:5173` in **two tabs** (or two windows).
-2. Both tabs default to **Broadcast** signaling and auto-discover each other via
-   the browser's BroadcastChannel — the left panel lists the other tab. (Each
-   tab has its own peer identity, so tabs are always distinct peers.)
-3. In tab A press **call** next to tab B's peer. Allow camera/mic when prompted.
-4. In tab B click **accept** (and allow camera/mic).
-5. Both videos appear. Media flows **directly between the two tabs over WebRTC**
-   — no server is involved. The stats line shows RTT, packet loss, bitrate, and
-   ICE candidate type.
-6. Controls: **mute / cam off / hang up**. Text chat is in the right column.
-   Click the remote video to toggle sound.
+1. Open the same URL on two devices (or two browsers).
+2. Both connect to the signaling hub at `/signal`. The left panel lists the other
+   peer automatically. You can also paste a Peer ID and press **add**.
+3. Press **call**, allow camera/mic, then **accept** on the other device.
+4. Media flows **directly over WebRTC**. The hub only carries SDP/ICE/chat.
+5. Controls: **mute / cam off / hang up**. Click the remote video to unmute.
 
-**Across devices — libp2p mode (through a relay):**
+**Same device — two tabs:**
+
+Switch signaling to **Same-browser tabs**. Tabs discover each other via
+BroadcastChannel with no extra server.
+
+**libp2p circuit-relay (advanced):**
 
 1. Start the browser relay server:
 
@@ -155,7 +158,7 @@ See [android/README.md](android/README.md) for the JNI wrapper and example app.
 
 | Symptom | Cause / fix |
 | --- | --- |
-| Peers never appear in Broadcast mode | You need **two tabs** open; BroadcastChannel is same-device only. Reload both tabs after an update. |
+| Peers never appear on another device | Stay on **Multi-device**. Both devices must use the same URL. Hard-reload if the page was open before this update. |
 | Call stays on "connecting" | Usually network/firewall blocking WebRTC (STUN on UDP/3478 or host candidates). Confirm on a plain network, or use libp2p mode through a relay. A tab left open from before a code update can also cause this — hard reload (`Ctrl+Shift+R` / `Cmd+Shift+R`). |
 | Black remote video | Browser autoplay policy blocks sound-on autoplay; the video starts muted by design. **Click the remote video to unmute.** |
 | Camera/mic denied | `getUserMedia` requires a secure context (HTTPS or `localhost`). |

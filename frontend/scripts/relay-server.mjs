@@ -33,7 +33,12 @@ const node = await createLibp2p({
     identify: identify({ runOnConnectionOpen: true }),
     ping: ping({ protocolPrefix: '/p2p-video-chat' }),
     relay: circuitRelayServer({
-      reservations: { maxReservations: 500, maxReservationTTL: 0, defaultDurationLimit: 0 },
+      reservations: {
+        maxReservations: 500,
+        reservationTtl: 2 * 60 * 60 * 1000,
+        defaultDurationLimit: 2 * 60 * 1000,
+        applyDefaultLimit: false,
+      },
     }),
   },
 })

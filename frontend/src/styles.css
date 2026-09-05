@@ -255,6 +255,17 @@ button:disabled {
   color: var(--accent);
 }
 
+.connect-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.connect-row input {
+  flex: 1;
+  min-width: 0;
+}
+
 /* Call panel */
 .call-status {
   margin-left: 8px;

@@ -10,9 +10,10 @@ import type { BrowserIdentity } from './identity'
 import { saveDisplayName } from './identity'
 import { BroadcastSignaling } from './signaling/broadcast'
 import { Libp2pSignaling } from './signaling/libp2p-signaling'
+import { SignalHubSignaling } from './signaling/signal-hub'
 import { WebRtcManager, type CallStats, type NegotiationRequest } from '../webrtc/webrtc-manager'
 
-export type SignalingMode = 'broadcast' | 'libp2p'
+export type SignalingMode = 'hub' | 'broadcast' | 'libp2p'
 
 export type CallStatus =
   | 'idle'
@@ -64,6 +65,7 @@ export class Controller {
   activeCall: ActiveCall | null = null
   onEvent: ((event: ControllerEvent) => void) | null = null
   private lastSeen = new Map<string, number>()
+  private hub: SignalHubSignaling | null = null
   private broadcast: BroadcastSignaling | null = null
   private libp2p: Libp2pSignaling | null = null
   private webrtc: WebRtcManager | null = null
@@ -79,7 +81,16 @@ export class Controller {
 
   async start(): Promise<void> {
     this.emit({ type: 'status', status: 'starting' })
-    if (this.mode === 'broadcast') {
+    if (this.mode === 'hub') {
+      this.hub = new SignalHubSignaling(this.identity, {
+        onPeer: (env) => this.handleEnvelope(env),
+        onPeerPresence: ({ peer_id, display_name, online }) => {
+          this.updatePresence(peer_id, display_name, online)
+        },
+        onStatus: (s) => this.emit({ type: 'status', status: s }),
+      })
+      this.hub.start()
+    } else if (this.mode === 'broadcast') {
       this.broadcast = new BroadcastSignaling(this.identity, {
         onPeer: (env) => this.handleEnvelope(env),
         onPeerPresence: ({ peer_id, display_name, online }) => {
@@ -87,7 +98,7 @@ export class Controller {
         },
       })
       this.broadcast.start()
-      this.emit({ type: 'status', status: 'online (broadcast mode)' })
+      this.emit({ type: 'status', status: 'online (same-browser tabs)' })
     } else {
       this.libp2p = new Libp2pSignaling(
         this.identity,
@@ -113,6 +124,13 @@ export class Controller {
   setDisplayName(name: string): void {
     saveDisplayName(name)
     this.identity = { ...this.identity, display_name: name }
+    this.hub?.rename(name)
+  }
+
+  connectPeer(peerId: string, displayName?: string): void {
+    const id = peerId.trim()
+    if (!id || id === this.identity.peer_id) return
+    this.updatePresence(id, displayName || id.slice(-8), true)
   }
 
   // ---- Peers ----
@@ -434,7 +452,9 @@ export class Controller {
   // ---- Send ----
 
   private async send(peerId: string, envelope: SignalEnvelope): Promise<void> {
-    if (this.broadcast) {
+    if (this.hub) {
+      this.hub.send(peerId, envelope)
+    } else if (this.broadcast) {
       this.broadcast.send(peerId, envelope)
     } else if (this.libp2p) {
       await this.libp2p.send(peerId, envelope)
@@ -446,6 +466,7 @@ export class Controller {
   }
 
   stop(): void {
+    this.hub?.stop()
     this.broadcast?.stop()
     void this.libp2p?.stop()
     void this.webrtc?.hangUp()

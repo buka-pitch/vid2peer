@@ -4,10 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:vite": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "relay": "node scripts/relay-server.mjs"
+    "relay": "node scripts/relay-server.mjs",
+    "hub": "node scripts/signal-hub.mjs"
   },
   "dependencies": {
     "@chainsafe/libp2p-noise": "^16.0.0",
@@ -23,7 +25,8 @@
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "uint8arrays": "^5.1.0"
+    "uint8arrays": "^5.1.0",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",

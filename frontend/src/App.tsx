@@ -7,7 +7,7 @@ import { DebugPanel } from './components/DebugPanel'
 import type { SignalingMode } from './lib/controller'
 
 export default function App() {
-  const [mode, setMode] = useState<SignalingMode>('broadcast')
+  const [mode, setMode] = useState<SignalingMode>('hub')
   const [relayAddr, setRelayAddr] = useState('')
   const [selectedPeer, setSelectedPeer] = useState<string | null>(null)
   const { controller, identity, peers, call, chats, status } = useController(mode, relayAddr || undefined)
@@ -20,14 +20,15 @@ export default function App() {
           <label>
             signaling:
             <select value={mode} onChange={(e) => setMode(e.target.value as SignalingMode)}>
-              <option value="broadcast">Broadcast (same device)</option>
-              <option value="libp2p">libp2p (relay)</option>
+              <option value="hub">Multi-device (default)</option>
+              <option value="broadcast">Same-browser tabs</option>
+              <option value="libp2p">libp2p circuit-relay</option>
             </select>
           </label>
           {mode === 'libp2p' && (
             <input
               className="relay-input"
-              placeholder="/ip4/host/tcp/9090/ws/p2p/... (relay addr)"
+              placeholder="/dns4/host/tcp/443/wss/p2p/... (relay addr)"
               value={relayAddr}
               onChange={(e) => setRelayAddr(e.target.value)}
             />
@@ -53,6 +54,7 @@ export default function App() {
           selectedPeerId={selectedPeer}
           onSelect={setSelectedPeer}
           onCall={(id) => void controller?.callPeer(id)}
+          onConnect={(id) => controller?.connectPeer(id)}
           busy={!!call && call.status !== 'ended'}
         />
         <div className="center-column">

@@ -45,18 +45,42 @@ export function PeerList({
   selectedPeerId,
   onSelect,
   onCall,
+  onConnect,
   busy,
 }: {
   peers: PeerInfo[]
   selectedPeerId: string | null
   onSelect: (id: string) => void
   onCall: (id: string) => void
+  onConnect?: (id: string) => void
   busy: boolean
 }) {
+  const [remoteId, setRemoteId] = useState('')
+
   return (
     <div className="card">
       <h2>Peers</h2>
-      {peers.length === 0 && <p className="muted">No peers discovered yet. Open this app in a second tab to demo.</p>}
+      <form
+        className="connect-row"
+        onSubmit={(e) => {
+          e.preventDefault()
+          const id = remoteId.trim()
+          if (!id) return
+          onConnect?.(id)
+          onSelect(id)
+          setRemoteId('')
+        }}
+      >
+        <input
+          value={remoteId}
+          onChange={(e) => setRemoteId(e.target.value)}
+          placeholder="paste a Peer ID from another device"
+        />
+        <button type="submit">add</button>
+      </form>
+      {peers.length === 0 && (
+        <p className="muted">Open this URL on another phone or laptop. Peers appear automatically, or paste a Peer ID above.</p>
+      )}
       <ul className="peer-list">
         {peers.map((p) => (
           <li key={p.peer_id} className={p.peer_id === selectedPeerId ? 'selected' : ''}>

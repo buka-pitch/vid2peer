@@ -77,20 +77,17 @@ cd frontend
 npm run dev            # Vite dev server on :5173
 ```
 
-Open the app in **two tabs** (default "Broadcast" signaling mode). The tabs
-discover each other via BroadcastChannel:
+`npm run dev` starts the Vite UI **and** the signaling hub. Open the preview
+URL on two devices (phone + laptop, two phones, two browsers). Peers appear
+automatically under **Multi-device**. Press **call**, allow camera/mic.
 
-1. Tab A: press **call** next to the discovered peer.
-2. Tab B: accept the incoming call. Camera/mic prompts appear (HTTPS or
-   localhost required for `getUserMedia`).
-3. Media flows **directly between the tabs over WebRTC**; signaling only
-   negotiated the connection.
+Same-browser two-tab demo: switch signaling to **Same-browser tabs**.
 
 Features: peer ID + QR + copy, online/offline status, incoming/outgoing call
 UI, video preview, mute/camera controls, hang up, connection status, quality
 stats (RTT / loss / bitrate / candidate type), text chat, debug panel.
 
-### libp2p signaling mode (across devices)
+### libp2p signaling mode (circuit-relay)
 
 ```bash
 # Terminal 3 — JS circuit-relay server for browsers
@@ -98,8 +95,8 @@ cd frontend && npm run relay
 #   => RELAY_INFO /ip4/0.0.0.0/tcp/9090/ws/p2p/<peerid>
 ```
 
-In the app select **libp2p** mode and paste the relay multiaddr. Browsers then
-signal through the relay; media still flows directly via WebRTC.
+In the app select **libp2p circuit-relay** and paste the relay multiaddr.
+Browsers then signal through the relay; media still flows directly via WebRTC.
 
 ## Android (Phase 6)
 
