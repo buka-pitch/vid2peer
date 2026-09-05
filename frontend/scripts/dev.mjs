@@ -14,7 +14,7 @@ const hub = spawn(process.execPath, [join(root, 'signal-hub.mjs')], {
   env: process.env,
 })
 
-const vite = spawn('npx', ['vite', '--host', 'true', '--port', '5173'], {
+const vite = spawn('npx', ['vite'], {
   cwd: frontend,
   stdio: 'inherit',
   env: process.env,
